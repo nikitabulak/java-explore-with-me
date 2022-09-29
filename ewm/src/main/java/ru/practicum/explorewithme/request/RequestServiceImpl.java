@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.request.model;
+package ru.practicum.explorewithme.request;
 
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.request.RequestService;

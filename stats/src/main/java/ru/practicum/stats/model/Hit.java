@@ -1,11 +1,10 @@
-package ru.practicum.explorewithme.user.model;
+package ru.practicum.stats.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -13,16 +12,21 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "hits")
+public class Hit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull
     @NotBlank
-    private String name;
-    @Email
+    private String app;
     @NotNull
     @NotBlank
-    private String email;
+    private String uri;
+    @NotNull
+    @NotBlank
+    private String ip;
+    @NotNull
+    @NotBlank
+    private String timestamp;
 }

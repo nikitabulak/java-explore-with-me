@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.category.dto.CategoryDto;
-import ru.practicum.explorewithme.user.dto.UserShortDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,23 +13,24 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class EventShortDto {
-    private long id;
+public class UpdateEventRequest {
+    private int eventId;
     @NotNull
     @NotBlank
     @Size(min = 20, max = 2000)
     private String annotation;
     @NotNull
     private CategoryDto categoryDto;
-    private int confirmedRequests;
+    @NotNull
+    @NotBlank
+    @Size(min = 20, max = 7000)
+    private String description;
     @NotNull
     private LocalDateTime eventDate;
-    @NotNull
-    private UserShortDto initiator;
     private boolean paid;
+    private int participantLimit;
     @NotNull
     @NotBlank
     @Size(min = 3, max = 120)
     private String title;
-    private int views;
 }

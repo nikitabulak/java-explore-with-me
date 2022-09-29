@@ -4,33 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.category.dto.CategoryDto;
-import ru.practicum.explorewithme.user.dto.UserShortDto;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class EventShortDto {
-    private long id;
-    @NotNull
-    @NotBlank
-    @Size(min = 20, max = 2000)
+//@Entity
+//@Table(name = "users")
+public class AdminUpdateEventRequest {
     private String annotation;
-    @NotNull
-    private CategoryDto categoryDto;
-    private int confirmedRequests;
-    @NotNull
+    private int category;
+    private String description;
     private LocalDateTime eventDate;
-    @NotNull
-    private UserShortDto initiator;
     private boolean paid;
-    @NotNull
-    @NotBlank
-    @Size(min = 3, max = 120)
+    private int participantLimit;
+    private boolean requestModeration;
     private String title;
-    private int views;
 }

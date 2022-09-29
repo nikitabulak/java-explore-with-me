@@ -2,14 +2,13 @@ package ru.practicum.explorewithme.user;
 
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.user.dto.UserDto;
-import ru.practicum.explorewithme.user.dto.UserShortDto;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Override
-    public List<UserShortDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return null;
     }
 

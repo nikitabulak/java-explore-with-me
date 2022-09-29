@@ -3,7 +3,6 @@ package ru.practicum.explorewithme.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.user.dto.UserDto;
-import ru.practicum.explorewithme.user.dto.UserShortDto;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class UserAdminController {
     private final UserService userService;
 
     @GetMapping()
-    public List<UserShortDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
