@@ -1,10 +1,7 @@
 package ru.practicum.explorewithme.category;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.category.dto.CategoryDto;
 
 import java.util.List;
@@ -16,8 +13,9 @@ public class CategoryPublicController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryDto> getAllCompilations() {
-        return categoryService.getAllCategories();
+    public List<CategoryDto> getAllCompilations(@RequestParam(required = false, defaultValue = "0") int from,
+                                                @RequestParam(required = false, defaultValue = "10") int size) {
+        return categoryService.getAllCategories(from, size);
     }
 
     @GetMapping("/{catId}")

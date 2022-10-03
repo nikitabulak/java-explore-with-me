@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.event.dto.EventFullDto;
 import ru.practicum.explorewithme.event.dto.EventShortDto;
+import ru.practicum.explorewithme.event.dto.NewEventDto;
+import ru.practicum.explorewithme.event.dto.UpdateEventRequest;
 import ru.practicum.explorewithme.request.dto.ParticipationRequestDto;
 
 import java.util.List;
@@ -15,18 +17,20 @@ public class EventPrivateController {
     private final EventService eventService;
 
     @GetMapping("/{userId}/events")
-    public List<EventShortDto> getAllEventsOfUser(@PathVariable long userId) {
-        return eventService.getAllEventsOfUser(userId);
+    public List<EventShortDto> getAllEventsOfUser(@PathVariable long userId,
+                                                  @RequestParam(required = false, defaultValue = "0") int from,
+                                                  @RequestParam(required = false, defaultValue = "10") int size) {
+        return eventService.getAllEventsOfUser(userId, from, size);
     }
 
     @PatchMapping("/{userId}/events")
-    public EventFullDto updateEventOfUser(@PathVariable long userId, @RequestBody EventFullDto updatingEventDto) {
-        return eventService.updateEventOfUser(userId, updatingEventDto);
+    public EventFullDto updateEventOfUser(@PathVariable long userId, @RequestBody UpdateEventRequest updateEventRequest) {
+        return eventService.updateEventOfUser(userId, updateEventRequest);
     }
 
     @PostMapping("/{userId}/events")
-    public EventFullDto createEventOfUser(@PathVariable long userId, @RequestBody EventFullDto creatingEventDto) {
-        return eventService.createEventOfUser(userId, creatingEventDto);
+    public EventFullDto createEventOfUser(@PathVariable long userId, @RequestBody NewEventDto newEventDto) {
+        return eventService.createEventOfUser(userId, newEventDto);
     }
 
     @GetMapping("/{userId}/events/{eventId}")
@@ -41,7 +45,7 @@ public class EventPrivateController {
 
     @GetMapping("/{userId}/events/{eventId}/requests")
     public List<ParticipationRequestDto> getRequestsToEventOfUser(@PathVariable long userId, @PathVariable long eventId) {
-        return eventService.getRequestsToEventOfUser(userId, eventId);
+        return eventService.getRequestsForEventOfUser(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests/{reqId}/confirm")

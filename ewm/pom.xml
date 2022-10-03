@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>explore-with-me-emw</artifactId>
+	<artifactId>explore-with-me-ewm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Explore With Me Backend</name>

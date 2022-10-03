@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@Entity
-//@Table(name = "users")
 public class AdminUpdateEventRequest {
     private String annotation;
     private int category;

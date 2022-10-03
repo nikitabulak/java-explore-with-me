@@ -19,8 +19,9 @@ public class RequestPrivateController {
     }
 
     @PostMapping("/{userId}/requests")
-    public ParticipationRequestDto createRequestToAnotherEvent(@PathVariable long userId) {
-        return requestService.createRequestToAnotherEvent(userId);
+    public ParticipationRequestDto createRequestToAnotherEvent(@PathVariable long userId,
+                                                               @RequestParam long eventId) {
+        return requestService.createRequestToAnotherEvent(userId, eventId);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")

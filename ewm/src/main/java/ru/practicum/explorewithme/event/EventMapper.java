@@ -47,11 +47,11 @@ public class EventMapper {
         );
     }
 
-    public static Event toNewEvent(NewEventDto newEventDto, LocalDateTime createdOn, User initiator, State state){
+    public static Event toNewEvent(NewEventDto newEventDto, Category category, LocalDateTime createdOn, User initiator, State state){
         return new Event(
                 0,
                 newEventDto.getAnnotation(),
-                newEventDto.getCategory(),
+                category,
                 createdOn,
                 newEventDto.getDescription(),
                 newEventDto.getEventDate(),
@@ -65,9 +65,9 @@ public class EventMapper {
         );
     }
 
-    public static Event updateEvent(Event event, UpdateEventRequest updateEventRequest){
+    public static Event updateEvent(Event event, Category category, UpdateEventRequest updateEventRequest){
         event.setAnnotation(updateEventRequest.getAnnotation());
-        event.setCategory(CategoryMapper.toExistingCategory(updateEventRequest.getCategoryDto()));
+        event.setCategory(category);
         event.setDescription(updateEventRequest.getDescription());
         event.setEventDate(updateEventRequest.getEventDate());
         event.setPaid(updateEventRequest.isPaid());

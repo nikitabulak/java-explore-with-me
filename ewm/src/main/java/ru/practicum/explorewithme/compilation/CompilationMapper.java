@@ -11,6 +11,8 @@ import ru.practicum.explorewithme.user.UserMapper;
 import ru.practicum.explorewithme.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class CompilationMapper {
@@ -27,7 +29,8 @@ public class CompilationMapper {
         return new Compilation(
                 0,
                 newCompilationDto.getTitle(),
-                newCompilationDto.isPinned()
+                newCompilationDto.isPinned(),
+                new HashSet<>()
         );
     }
 }

@@ -14,13 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class UpdateEventRequest {
-    private int eventId;
+    private long eventId;
     @NotNull
     @NotBlank
     @Size(min = 20, max = 2000)
     private String annotation;
-    @NotNull
-    private CategoryDto categoryDto;
+    private long category;
     @NotNull
     @NotBlank
     @Size(min = 20, max = 7000)

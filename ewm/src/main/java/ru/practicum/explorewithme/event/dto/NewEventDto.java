@@ -3,7 +3,6 @@ package ru.practicum.explorewithme.event.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.explorewithme.category.model.Category;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,11 +15,12 @@ import java.time.LocalDateTime;
 public class NewEventDto {
     @NotNull
     @NotBlank
+    @Size(min = 20, max = 2000)
     private String annotation;
-    @NotNull
-    private Category category;
+    private long category;
     @NotNull
     @NotBlank
+    @Size(min = 20, max = 7000)
     private String description;
     @NotNull
     private LocalDateTime eventDate;
