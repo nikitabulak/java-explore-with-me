@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -28,5 +29,5 @@ public class Hit {
     private String ip;
     @NotNull
     @NotBlank
-    private String timestamp;
+    private LocalDateTime timestamp;
 }

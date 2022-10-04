@@ -3,10 +3,7 @@ package ru.practicum.explorewithme.event;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.category.CategoryRepository;
 import ru.practicum.explorewithme.category.model.Category;
-import ru.practicum.explorewithme.event.dto.EventFullDto;
-import ru.practicum.explorewithme.event.dto.EventShortDto;
-import ru.practicum.explorewithme.event.dto.NewEventDto;
-import ru.practicum.explorewithme.event.dto.UpdateEventRequest;
+import ru.practicum.explorewithme.event.dto.*;
 import ru.practicum.explorewithme.event.model.Event;
 import ru.practicum.explorewithme.event.model.NewEventHit;
 import ru.practicum.explorewithme.event.model.State;
@@ -211,23 +208,45 @@ public class EventServiceImpl implements EventService {
 
     //Admin___________________________________________________
     @Override
-    public List<EventFullDto> getFullEvents(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        return null;
+    public List<EventFullDto> getFullEvents(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        List<Event> events = eventRepository.getFullEvents(users, states, categories, rangeStart, rangeEnd, OffsetLimitPageable.of(from, size));
+        return events.stream()
+                .map(x -> EventMapper.toEventFullDto(x, getConfirmedRequestsCount(x.getId()), getEventViews(x)))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public EventFullDto editEvent(long eventId, EventFullDto editingEvent) {
-        return null;
+    public EventFullDto editEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
+        Category category = categoryRepository.findById(adminUpdateEventRequest.getCategory()).orElseThrow(() -> new CategoryNotFoundException("Категория с таким id не найдена"));
+        event = EventMapper.updateAdminEvent(event, adminUpdateEventRequest, category);
+        event = eventRepository.save(event);
+        return EventMapper.toEventFullDto(event, getConfirmedRequestsCount(event.getId()), getEventViews(event));
     }
 
     @Override
     public EventFullDto publishEvent(long eventId) {
-        return null;
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
+        if(event.getState().equals(State.PENDING) && event.getEventDate().isAfter(LocalDateTime.now().plusHours(1))){
+            event.setState(State.PUBLISHED);
+            event = eventRepository.save(event);
+            return EventMapper.toEventFullDto(event, getConfirmedRequestsCount(event.getId()), getEventViews(event));
+        } else {
+            throw new IllegalArgumentException("Событие не ожидает публикации, либо до него осталось менее часа");
+        }
+
     }
 
     @Override
     public EventFullDto rejectEvent(long eventId) {
-        return null;
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
+        if(!event.getState().equals(State.PUBLISHED)){
+            event.setState(State.CANCELED);
+            event = eventRepository.save(event);
+            return EventMapper.toEventFullDto(event, getConfirmedRequestsCount(event.getId()), getEventViews(event));
+        } else {
+            throw new IllegalArgumentException("Событие не опубликовано");
+        }
     }
 
     public int getConfirmedRequestsCount(long eventId) {

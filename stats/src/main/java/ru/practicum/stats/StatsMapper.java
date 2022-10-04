@@ -1,6 +1,6 @@
 package ru.practicum.stats;
 
-import ru.practicum.stats.dto.NewHitDto;
+import ru.practicum.stats.dto.EndpointHit;
 import ru.practicum.stats.dto.StatsDto;
 import ru.practicum.stats.model.Hit;
 
@@ -13,7 +13,7 @@ public class StatsMapper {
         );
     }
 
-    public static Hit toNewHit(NewHitDto newHitDto) {
+    public static Hit toNewHit(EndpointHit newHitDto) {
         return new Hit(
                 0,
                 newHitDto.getApp(),

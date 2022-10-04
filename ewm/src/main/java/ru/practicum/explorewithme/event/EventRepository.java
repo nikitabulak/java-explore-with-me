@@ -20,9 +20,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select i from Event i " +
             "where (upper(i.annotation) like upper(concat('%', ?1, '%')) " +
             " or upper(i.description) like upper(concat('%', ?1, '%'))) " +
-            " and i.category in ?2 " +
+            " and i.category.id in ?2 " +
             " and i.paid = ?3 " +
-            " and i.eventDate > ?4 " +
+            " and i.eventDate >= ?4 " +
             " and i.eventDate < ?5 ")
 //            " and i.state like 'PUBLISHED'")
     List<Event> getEvents(String text,
@@ -33,4 +33,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                           Pageable pageable);
     List<Event> findAllByInitiatorId(long userId, Pageable pageable);
     Event findEventByIdAndInitiatorId(long eventId, long userId);
+    @Query("select i from Event i " +
+            "where i.initiator.id in ?1 " +
+            " and i.state in ?2 " +
+            " and i.category.id in ?3 " +
+            " and i.eventDate >= ?4 " +
+            " and i.eventDate < ?5 ")
+    List<Event> getFullEvents(List<Long> users,
+                              List<String> states,
+                              List<Long> categories,
+                              LocalDateTime rangeStart,
+                              LocalDateTime rangeEnd,
+                              Pageable pageable);
+    List<Event> findEventsByCategoryId(long catId);
 }

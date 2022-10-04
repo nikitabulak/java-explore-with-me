@@ -2,9 +2,11 @@ package ru.practicum.explorewithme.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.explorewithme.event.dto.AdminUpdateEventRequest;
 import ru.practicum.explorewithme.event.dto.EventFullDto;
 import ru.practicum.explorewithme.event.dto.EventShortDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,16 +19,16 @@ public class EventAdminController {
     public List<EventFullDto> getFullEvents(@RequestParam(required = false) List<Long> users,
                                             @RequestParam(required = false) List<String> states,
                                             @RequestParam(required = false) List<Long> categories,
-                                            @RequestParam(required = false) String rangeStart,
-                                            @RequestParam(required = false) String rangeEnd,
+                                            @RequestParam(required = false) LocalDateTime rangeStart,
+                                            @RequestParam(required = false) LocalDateTime rangeEnd,
                                             @RequestParam(required = false, defaultValue = "0") int from,
                                             @RequestParam(required = false, defaultValue = "10") int size) {
         return eventService.getFullEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PutMapping("/{eventId}")
-    public EventFullDto editEvent(@PathVariable long eventId, @RequestBody EventFullDto editingEvent) {
-        return eventService.editEvent(eventId, editingEvent);
+    public EventFullDto editEvent(@PathVariable long eventId, @RequestBody AdminUpdateEventRequest adminUpdateEventRequest) {
+        return eventService.editEvent(eventId, adminUpdateEventRequest);
     }
 
     @PatchMapping("/{eventId}/publish")

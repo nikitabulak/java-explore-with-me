@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminUpdateEventRequest {
     private String annotation;
-    private int category;
+    private long category;
     private String description;
     private LocalDateTime eventDate;
     private boolean paid;

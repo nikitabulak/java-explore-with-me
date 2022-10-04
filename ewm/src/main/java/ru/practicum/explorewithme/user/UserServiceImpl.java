@@ -1,24 +1,43 @@
 package ru.practicum.explorewithme.user;
 
 import org.springframework.stereotype.Service;
+import ru.practicum.explorewithme.exception.UserNotFoundException;
+import ru.practicum.explorewithme.pageable.OffsetLimitPageable;
+import ru.practicum.explorewithme.user.dto.NewUserRequest;
 import ru.practicum.explorewithme.user.dto.UserDto;
+import ru.practicum.explorewithme.user.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Override
-    public List<UserDto> getAllUsers() {
-        return null;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        return null;
+    public List<UserDto> getAllUsers(List<Long> ids, int from, int size) {
+        List<User> users = userRepository.findUsersByIdIn(ids, OffsetLimitPageable.of(from, size));
+        return users.stream()
+                .map(x -> UserMapper.toUserDto(x))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto createUser(NewUserRequest newUserRequest) {
+        User user = UserMapper.toNewUser(newUserRequest);
+        user = userRepository.save(user);
+        return UserMapper.toUserDto(user);
     }
 
     @Override
     public void deleteUser(long userId) {
-
+//        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден"));
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        }
     }
 }

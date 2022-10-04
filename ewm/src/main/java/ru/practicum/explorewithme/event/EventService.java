@@ -1,9 +1,6 @@
 package ru.practicum.explorewithme.event;
 
-import ru.practicum.explorewithme.event.dto.EventFullDto;
-import ru.practicum.explorewithme.event.dto.EventShortDto;
-import ru.practicum.explorewithme.event.dto.NewEventDto;
-import ru.practicum.explorewithme.event.dto.UpdateEventRequest;
+import ru.practicum.explorewithme.event.dto.*;
 import ru.practicum.explorewithme.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,12 +44,12 @@ public interface EventService {
     List<EventFullDto> getFullEvents(List<Long> users,
                                      List<String> states,
                                      List<Long> categories,
-                                     String rangeStart,
-                                     String rangeEnd,
+                                     LocalDateTime rangeStart,
+                                     LocalDateTime rangeEnd,
                                      Integer from,
                                      Integer size);
 
-    EventFullDto editEvent(long eventId, EventFullDto editingEvent);
+    EventFullDto editEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest);
     EventFullDto publishEvent(long eventId);
     EventFullDto rejectEvent(long eventId);
 }
