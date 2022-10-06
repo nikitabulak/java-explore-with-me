@@ -29,19 +29,23 @@ public class HitMapper {
                 LocalDateTime.now()
         );
     }
-    public static StatsDto toStatsDto(List<Hit> hits, boolean unique){
-        if(!unique){
-            return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), hits.size());
-        } else {
-            List<String> ips = new ArrayList<>();
-            int uniqueHits = 0;
-            for(Hit hit : hits) {
-                if (!ips.contains(hit.getIp())){
-                    ips.add(hit.getIp());
-                    uniqueHits++;
+    public static StatsDto toStatsDto(List<Hit> hits, boolean unique) {
+        if (!hits.isEmpty()) {
+            if (!unique) {
+                return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), hits.size());
+            } else {
+                List<String> ips = new ArrayList<>();
+                int uniqueHits = 0;
+                for (Hit hit : hits) {
+                    if (!ips.contains(hit.getIp())) {
+                        ips.add(hit.getIp());
+                        uniqueHits++;
+                    }
                 }
+                return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), uniqueHits);
             }
-            return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), uniqueHits);
+        } else {
+            return new StatsDto(null, null, 0);
         }
     }
 }

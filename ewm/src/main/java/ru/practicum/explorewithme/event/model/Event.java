@@ -1,8 +1,10 @@
 package ru.practicum.explorewithme.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.explorewithme.category.model.Category;
 import ru.practicum.explorewithme.user.model.User;
 
@@ -36,11 +38,15 @@ public class Event {
     private String description;
     @NotNull
     @Column(name = "event_date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     @NotNull
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "initiator_id", referencedColumnName = "id")
     private User initiator;
+    @Embedded
+    private Location location;
     private boolean paid;
     @Column(name = "participant_limit")
     private int participantLimit;

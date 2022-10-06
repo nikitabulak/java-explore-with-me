@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.event.dto.EventFullDto;
 import ru.practicum.explorewithme.event.dto.EventShortDto;
@@ -19,8 +20,8 @@ public class EventPublicController {
     public List<EventShortDto> getAllEvents(@RequestParam String text,
                                             @RequestParam List<Long> categories,
                                             @RequestParam boolean paid,
-                                            @RequestParam LocalDateTime rangeStart,
-                                            @RequestParam LocalDateTime rangeEnd,
+                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                             @RequestParam(required = false, defaultValue = "false") boolean onlyAvailable,
                                             @RequestParam String sort,
                                             @RequestParam(required = false, defaultValue = "0") int from,

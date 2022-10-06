@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.event;
 
 import ru.practicum.explorewithme.event.dto.*;
+import ru.practicum.explorewithme.event.model.State;
 import ru.practicum.explorewithme.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,7 @@ public interface EventService {
 
     //Admin___________________________________________________
     List<EventFullDto> getFullEvents(List<Long> users,
-                                     List<String> states,
+                                     List<State> states,
                                      List<Long> categories,
                                      LocalDateTime rangeStart,
                                      LocalDateTime rangeEnd,

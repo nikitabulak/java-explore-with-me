@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +12,5 @@ import java.util.List;
 public class NewCompilationDto {
     private String title;
     private boolean pinned;
-    private List<Long> events;
+    private Set<Long> events;
 }

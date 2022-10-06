@@ -7,7 +7,7 @@ import ru.practicum.explorewithme.event.dto.EventShortDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +18,5 @@ public class CompilationDto {
     @NotBlank
     private String title;
     private boolean pinned;
-    private List<EventShortDto> eventsList;
+    private Set<EventShortDto> events;
 }

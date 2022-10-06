@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explorewithme.event.model.Event;
+import ru.practicum.explorewithme.event.model.State;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -31,8 +33,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                           LocalDateTime rangeStart,
                           LocalDateTime rangeEnd,
                           Pageable pageable);
+
     List<Event> findAllByInitiatorId(long userId, Pageable pageable);
+
     Event findEventByIdAndInitiatorId(long eventId, long userId);
+
     @Query("select i from Event i " +
             "where i.initiator.id in ?1 " +
             " and i.state in ?2 " +
@@ -40,10 +45,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             " and i.eventDate >= ?4 " +
             " and i.eventDate < ?5 ")
     List<Event> getFullEvents(List<Long> users,
-                              List<String> states,
+                              List<State> states,
                               List<Long> categories,
                               LocalDateTime rangeStart,
                               LocalDateTime rangeEnd,
                               Pageable pageable);
+
     List<Event> findEventsByCategoryId(long catId);
+
+    Set<Event> findEventsByIdIn(Set<Long> ids);
 }

@@ -6,14 +6,15 @@ import ru.practicum.explorewithme.compilation.dto.NewCompilationDto;
 import ru.practicum.explorewithme.compilation.model.Compilation;
 import ru.practicum.explorewithme.event.EventMapper;
 import ru.practicum.explorewithme.event.EventRepository;
-import ru.practicum.explorewithme.event.EventService;
 import ru.practicum.explorewithme.event.EventServiceImpl;
 import ru.practicum.explorewithme.event.model.Event;
 import ru.practicum.explorewithme.exception.CompilationNotFoundException;
 import ru.practicum.explorewithme.exception.EventNotFoundException;
 import ru.practicum.explorewithme.pageable.OffsetLimitPageable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,7 @@ public class CompilationServiceImpl implements CompilationService {
         return compilations.stream()
                 .map(x -> CompilationMapper.toCompilationDto(x, x.getEvents().stream()
                         .map(k -> EventMapper.toEventShortDto(k, eventService.getConfirmedRequestsCount(k.getId()), eventService.getEventViews(k)))
-                        .collect(Collectors.toList())))
+                        .collect(Collectors.toSet())))
                 .collect(Collectors.toList());
     }
 
@@ -44,16 +45,17 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotFoundException("Подборка с таким id не найдена!"));
         return CompilationMapper.toCompilationDto(compilation, compilation.getEvents().stream()
                 .map(k -> EventMapper.toEventShortDto(k, eventService.getConfirmedRequestsCount(k.getId()), eventService.getEventViews(k)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
     }
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        Compilation compilation = CompilationMapper.toNewCompilation(newCompilationDto);
+        Set<Event> events = new HashSet<>(eventRepository.findEventsByIdIn(newCompilationDto.getEvents()));
+        Compilation compilation = CompilationMapper.toNewCompilation(newCompilationDto, events);
         compilation = compilationRepository.save(compilation);
         return CompilationMapper.toCompilationDto(compilation, compilation.getEvents().stream()
                 .map(k -> EventMapper.toEventShortDto(k, eventService.getConfirmedRequestsCount(k.getId()), eventService.getEventViews(k)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
     }
 
     @Override
@@ -79,7 +81,7 @@ public class CompilationServiceImpl implements CompilationService {
         compilation = compilationRepository.save(compilation);
         return CompilationMapper.toCompilationDto(compilation, compilation.getEvents().stream()
                 .map(k -> EventMapper.toEventShortDto(k, eventService.getConfirmedRequestsCount(k.getId()), eventService.getEventViews(k)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
     }
 
     @Override
@@ -96,6 +98,6 @@ public class CompilationServiceImpl implements CompilationService {
         compilation = compilationRepository.save(compilation);
         return CompilationMapper.toCompilationDto(compilation, compilation.getEvents().stream()
                 .map(k -> EventMapper.toEventShortDto(k, eventService.getConfirmedRequestsCount(k.getId()), eventService.getEventViews(k)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
     }
 }

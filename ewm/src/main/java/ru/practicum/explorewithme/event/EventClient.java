@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -11,6 +12,7 @@ import ru.practicum.explorewithme.event.dto.StatsDto;
 import ru.practicum.explorewithme.event.model.NewEventHit;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,9 @@ public class EventClient extends BaseClient {
                 "uris", uris,
                 "unique", unique
         );
-        return (StatsDto) get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters).getBody();
+        ResponseEntity<Object> entity = get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+        LinkedHashMap<String, Object> linkedHashMap = (LinkedHashMap<String, Object>) entity.getBody();
+        StatsDto statsDto = new StatsDto((String) linkedHashMap.get("app"), (String) linkedHashMap.get("uri"), (int) linkedHashMap.get("hits"));
+        return statsDto;
     }
 }
