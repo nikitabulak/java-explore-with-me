@@ -8,7 +8,6 @@ import ru.practicum.explorewithme.event.model.State;
 import ru.practicum.explorewithme.exception.EventNotFoundException;
 import ru.practicum.explorewithme.exception.ParticipantLimitReachedException;
 import ru.practicum.explorewithme.exception.UserNotFoundException;
-import ru.practicum.explorewithme.request.RequestService;
 import ru.practicum.explorewithme.request.dto.ParticipationRequestDto;
 import ru.practicum.explorewithme.request.model.Request;
 import ru.practicum.explorewithme.request.model.Status;
@@ -47,23 +46,34 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findRequestByEventIdAndRequesterId(eventId, userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         if (request == null && userId != event.getInitiator().getId() && event.getState().equals(State.PUBLISHED)) {
-            if (event.getParticipantLimit() == eventService.getConfirmedRequestsCount(event.getId())) {
+//            if (event.getParticipantLimit() == eventService.getConfirmedRequestsCount(event.getId())) {
+//                throw new ParticipantLimitReachedException();
+//            }
+//            if (event.getParticipantLimit() == 0 || !event.isRequestModeration() || event.getParticipantLimit() > eventService.getConfirmedRequestsCount(event.getId())) {
+            if (event.getParticipantLimit() == 0 || event.getParticipantLimit() > eventService.getConfirmedRequestsCount(event.getId())) {
+                Status status = Status.PENDING;
+                if (!event.isRequestModeration()) {
+                    status = Status.CONFIRMED;
+                }
+                User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден"));
+//                request = new Request(0, user, event, LocalDateTime.now(), event.isRequestModeration() ? Status.PENDING : Status.PUBLISHED);
+                request = new Request(0, user, event, LocalDateTime.now(), status);
+                request = requestRepository.save(request);
+                return RequestMapper.toParticipationRequestDto(request);
+            } else {
                 throw new ParticipantLimitReachedException();
             }
-            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден"));
-            request = new Request(0, user, event, LocalDateTime.now(), event.isRequestModeration() ? Status.PENDING : Status.PUBLISHED);
-            request = requestRepository.save(request);
-            return RequestMapper.toParticipationRequestDto(request);
         } else {
             throw new IllegalArgumentException(String.format("Can't create request to event with id = %d from user with id = %d", eventId, userId));
         }
     }
 
+
     @Override
     public ParticipationRequestDto cancelRequestToAnotherEvent(long userId, long requestId) {
         Request request = requestRepository.findRequestByIdAndRequesterId(requestId, userId);
         if (request != null) {
-            request.setStatus(Status.REJECTED);
+            request.setStatus(Status.CANCELED);
             request = requestRepository.save(request);
             return RequestMapper.toParticipationRequestDto(request);
         } else {

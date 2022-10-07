@@ -1,5 +1,6 @@
 package ru.practicum.explorewithme.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class UpdateEventRequest {
     @Size(min = 20, max = 7000)
     private String description;
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private boolean paid;
     private int participantLimit;

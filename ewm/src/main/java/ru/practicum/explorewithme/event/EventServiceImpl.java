@@ -173,22 +173,23 @@ public class EventServiceImpl implements EventService {
         Request request = requestRepository.findRequestByIdAndEventIdAndEventInitiatorId(reqId, eventId, userId);
         if (request != null) {
             if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
-                if (event.getParticipantLimit() != getConfirmedRequestsCount(eventId)) {
-                    request.setStatus(Status.PUBLISHED);
-                    request = requestRepository.save(request);
-                    if (event.getParticipantLimit() == getConfirmedRequestsCount(eventId)) {
-                        List<Request> pendingRequests = requestRepository.findAllByEventIdAndStatus(eventId, Status.PENDING);
-                        for (Request pendingRequest : pendingRequests) {
-                            pendingRequest.setStatus(Status.REJECTED);
-                            requestRepository.save(pendingRequest);
-                        }
+                request.setStatus(Status.CONFIRMED);
+                request = requestRepository.save(request);
+                return RequestMapper.toParticipationRequestDto(request);
+            }
+            if (event.getParticipantLimit() != getConfirmedRequestsCount(eventId)) {
+                request.setStatus(Status.CONFIRMED);
+                request = requestRepository.save(request);
+                if (event.getParticipantLimit() == getConfirmedRequestsCount(eventId)) {
+                    List<Request> pendingRequests = requestRepository.findAllByEventIdAndStatus(eventId, Status.PENDING);
+                    for (Request pendingRequest : pendingRequests) {
+                        pendingRequest.setStatus(Status.REJECTED);
+                        requestRepository.save(pendingRequest);
                     }
-                    return RequestMapper.toParticipationRequestDto(request);
-                } else {
-                    throw new ParticipantLimitReachedException();
                 }
+                return RequestMapper.toParticipationRequestDto(request);
             } else {
-                throw new IllegalArgumentException("Moderation is not required");
+                throw new ParticipantLimitReachedException();
             }
         } else {
             throw new IllegalArgumentException(String.format("Request with id = %d to event with id = %d created by user with id =%d not found", reqId, eventId, userId));
@@ -280,7 +281,7 @@ public class EventServiceImpl implements EventService {
     }
 
     public int getConfirmedRequestsCount(long eventId) {
-        return requestRepository.findByEventIdAndStatus(eventId, Status.PUBLISHED).size();
+        return requestRepository.findByEventIdAndStatus(eventId, Status.CONFIRMED).size();
     }
 
     public int getEventViews(Event event) {
