@@ -21,7 +21,7 @@ import java.util.Map;
 public class EventClient extends BaseClient {
 
     @Autowired
-    public EventClient(@Value("${explore-with-me-stats.url}") String serverUrl, RestTemplateBuilder builder) {
+    public EventClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
