@@ -12,6 +12,7 @@ import ru.practicum.explorewithme.event.dto.StatsDto;
 import ru.practicum.explorewithme.event.model.NewEventHit;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +39,16 @@ public class EventClient extends BaseClient {
 
     public StatsDto getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
+                "start", start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                "end", end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 "uris", uris,
                 "unique", unique
         );
         ResponseEntity<Object> entity = get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
-        LinkedHashMap<String, Object> linkedHashMap = (LinkedHashMap<String, Object>) entity.getBody();
-        StatsDto statsDto = new StatsDto((String) linkedHashMap.get("app"), (String) linkedHashMap.get("uri"), (int) linkedHashMap.get("hits"));
-        return statsDto;
+        System.out.println(entity);
+        @SuppressWarnings("unchecked")
+        List<LinkedHashMap<String, Object>> list = (List<LinkedHashMap<String, Object>>) entity.getBody();
+        LinkedHashMap<String, Object> linkedHashMap = list.get(0);
+        return new StatsDto((String) linkedHashMap.get("app"), (String) linkedHashMap.get("uri"), (int) linkedHashMap.get("hits"));
     }
 }

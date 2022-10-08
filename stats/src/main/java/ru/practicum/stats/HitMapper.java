@@ -6,8 +6,6 @@ import ru.practicum.stats.dto.StatsDto;
 import ru.practicum.stats.model.Hit;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HitMapper {
     public static HitDto toHitDto(Hit hit) {
@@ -29,23 +27,8 @@ public class HitMapper {
                 LocalDateTime.now()
         );
     }
-    public static StatsDto toStatsDto(List<Hit> hits, boolean unique) {
-        if (!hits.isEmpty()) {
-            if (!unique) {
-                return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), hits.size());
-            } else {
-                List<String> ips = new ArrayList<>();
-                int uniqueHits = 0;
-                for (Hit hit : hits) {
-                    if (!ips.contains(hit.getIp())) {
-                        ips.add(hit.getIp());
-                        uniqueHits++;
-                    }
-                }
-                return new StatsDto(hits.get(0).getApp(), hits.get(0).getUri(), uniqueHits);
-            }
-        } else {
-            return new StatsDto(null, null, 0);
-        }
+
+    public static StatsDto toStatsDto(Hit hit) {
+        return new StatsDto(hit.getApp(), hit.getUri(), 1);
     }
 }

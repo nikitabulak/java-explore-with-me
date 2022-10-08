@@ -11,4 +11,8 @@ public class StatsDto {
     private String app;
     private String uri;
     private int hits;
+
+    public int hitsIncrease(){
+        return ++hits;
+    }
 }
