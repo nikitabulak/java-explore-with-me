@@ -19,14 +19,11 @@ import java.util.Map;
 
 @Service
 public class EventClient extends BaseClient {
-//    private static final String API_PREFIX = "/bookings";
 
     @Autowired
-//    public EventClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) {
     public EventClient(@Value("${explore-with-me-stats.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
-//                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                         .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                         .build()
@@ -45,7 +42,6 @@ public class EventClient extends BaseClient {
                 "unique", unique
         );
         ResponseEntity<Object> entity = get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
-        System.out.println(entity);
         @SuppressWarnings("unchecked")
         List<LinkedHashMap<String, Object>> list = (List<LinkedHashMap<String, Object>>) entity.getBody();
         LinkedHashMap<String, Object> linkedHashMap = list.get(0);

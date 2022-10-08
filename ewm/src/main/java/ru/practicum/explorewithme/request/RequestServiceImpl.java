@@ -46,17 +46,12 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findRequestByEventIdAndRequesterId(eventId, userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         if (request == null && userId != event.getInitiator().getId() && event.getState().equals(State.PUBLISHED)) {
-//            if (event.getParticipantLimit() == eventService.getConfirmedRequestsCount(event.getId())) {
-//                throw new ParticipantLimitReachedException();
-//            }
-//            if (event.getParticipantLimit() == 0 || !event.isRequestModeration() || event.getParticipantLimit() > eventService.getConfirmedRequestsCount(event.getId())) {
             if (event.getParticipantLimit() == 0 || event.getParticipantLimit() > eventService.getConfirmedRequestsCount(event.getId())) {
                 Status status = Status.PENDING;
                 if (!event.isRequestModeration()) {
                     status = Status.CONFIRMED;
                 }
                 User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден"));
-//                request = new Request(0, user, event, LocalDateTime.now(), event.isRequestModeration() ? Status.PENDING : Status.PUBLISHED);
                 request = new Request(0, user, event, LocalDateTime.now(), status);
                 request = requestRepository.save(request);
                 return RequestMapper.toParticipationRequestDto(request);

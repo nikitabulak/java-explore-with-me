@@ -22,9 +22,6 @@ public interface EventService {
 
     EventFullDto getEvent(long eventId, HttpServletRequest httpServletRequest);
 
-    List<EventShortDto> search(String text);
-
-
     //Private___________________________________________________
     List<EventShortDto> getAllEventsOfUser(long userId, int from, int size);
 

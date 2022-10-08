@@ -15,18 +15,11 @@ import java.util.Set;
 public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select i from Event i " +
             "where (upper(i.annotation) like upper(concat('%', ?1, '%')) " +
-            " or upper(i.description) like upper(concat('%', ?1, '%'))) ")
-//            " and i.state like 'PUBLISHED'")
-    List<Event> search(String text);
-
-    @Query("select i from Event i " +
-            "where (upper(i.annotation) like upper(concat('%', ?1, '%')) " +
             " or upper(i.description) like upper(concat('%', ?1, '%'))) " +
             " and i.category.id in ?2 " +
             " and i.paid = ?3 " +
             " and i.eventDate >= ?4 " +
             " and i.eventDate < ?5 ")
-//            " and i.state like 'PUBLISHED'")
     List<Event> getEvents(String text,
                           List<Long> categories,
                           boolean paid,

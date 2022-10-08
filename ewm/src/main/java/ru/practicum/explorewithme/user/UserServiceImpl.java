@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.user;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.explorewithme.exception.UserNotFoundException;
 import ru.practicum.explorewithme.pageable.OffsetLimitPageable;
 import ru.practicum.explorewithme.user.dto.NewUserRequest;
 import ru.practicum.explorewithme.user.dto.UserDto;
@@ -22,7 +21,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers(List<Long> ids, int from, int size) {
         List<User> users = userRepository.findUsersByIdIn(ids, OffsetLimitPageable.of(from, size));
         return users.stream()
-                .map(x -> UserMapper.toUserDto(x))
+                .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +34,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(long userId) {
-//        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден"));
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         }

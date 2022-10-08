@@ -19,10 +19,9 @@ import ru.practicum.explorewithme.request.model.Request;
 import ru.practicum.explorewithme.request.model.Status;
 import ru.practicum.explorewithme.user.UserRepository;
 import ru.practicum.explorewithme.user.model.User;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,23 +75,10 @@ public class EventServiceImpl implements EventService {
         eventClient.hit(new NewEventHit("ewm",
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr(),
-                LocalDateTime.now().toString()));
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
         return EventMapper.toEventFullDto((event),
                 getConfirmedRequestsCount(eventId),
                 getEventViews(event));
-    }
-
-    @Override
-    //TODO убрать, если не пригодится
-    public List<EventShortDto> search(String text) {
-        if (!text.isBlank()) {
-            return eventRepository.search(text).stream()
-                    .filter(x -> x.getState().equals(State.PUBLISHED))
-                    .map(x -> EventMapper.toEventShortDto(x, getConfirmedRequestsCount(x.getId()), getEventViews(x)))
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
-        }
     }
 
     //Private___________________________________________________
@@ -196,35 +182,6 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    // БЫЛО
-//    @Override
-//    public ParticipationRequestDto confirmRequestToEventOfUser(long userId, long eventId, long reqId) {
-//        Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId);
-//        Request request = requestRepository.findRequestByIdAndEventIdAndEventInitiatorId(reqId, eventId, userId);
-//        if (request != null) {
-//            if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
-//                if (event.getParticipantLimit() != getConfirmedRequestsCount(eventId)) {
-//                    request.setStatus(Status.PUBLISHED);
-//                    request = requestRepository.save(request);
-//                    if (event.getParticipantLimit() == getConfirmedRequestsCount(eventId)) {
-//                        List<Request> pendingRequests = requestRepository.findAllByEventIdAndStatus(eventId, Status.PENDING);
-//                        for (Request pendingRequest : pendingRequests) {
-//                            pendingRequest.setStatus(Status.REJECTED);
-//                            requestRepository.save(pendingRequest);
-//                        }
-//                    }
-//                    return RequestMapper.toParticipationRequestDto(request);
-//                } else {
-//                    throw new ParticipantLimitReachedException();
-//                }
-//            } else {
-//                throw new IllegalArgumentException("Moderation is not required");
-//            }
-//        } else {
-//            throw new IllegalArgumentException(String.format("Request with id = %d to event with id = %d created by user with id =%d not found", reqId, eventId, userId));
-//        }
-//    }
-
     @Override
     public ParticipationRequestDto rejectRequestToEventOfUser(long userId, long eventId, long reqId) {
         Request request = requestRepository.findRequestByIdAndEventIdAndEventInitiatorId(reqId, eventId, userId);
@@ -250,7 +207,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto editEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         Category category = categoryRepository.findById(adminUpdateEventRequest.getCategory()).orElseThrow(() -> new CategoryNotFoundException("Категория с таким id не найдена"));
-        event = EventMapper.updateAdminEvent(event, adminUpdateEventRequest, category);
+        EventMapper.updateAdminEvent(event, adminUpdateEventRequest, category);
         event = eventRepository.save(event);
         return EventMapper.toEventFullDto(event, getConfirmedRequestsCount(event.getId()), getEventViews(event));
     }
@@ -285,7 +242,6 @@ public class EventServiceImpl implements EventService {
     }
 
     public int getEventViews(Event event) {
-//        Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие не найдено!"));
         return eventClient.getStats(GET_EVENT_VIEWS_START_DATE, event.getEventDate(), List.of("/events/" + event.getId()), false).getHits();
     }
 

@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.compilation;
 
-import org.springframework.data.domain.Pageable;
 import ru.practicum.explorewithme.compilation.dto.CompilationDto;
 import ru.practicum.explorewithme.compilation.dto.NewCompilationDto;
 

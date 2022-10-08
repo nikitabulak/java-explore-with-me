@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(long catId) {
         List<Event> events = eventRepository.findEventsByCategoryId(catId);
-        if(events.isEmpty()){
+        if (events.isEmpty()) {
             categoryRepository.deleteById(catId);
         } else {
             throw new IllegalArgumentException("С данной категорией связаны события");
