@@ -12,7 +12,7 @@ public class StatsDto {
     private String uri;
     private int hits;
 
-    public int hitsIncrease(){
+    public int hitsIncrease() {
         return ++hits;
     }
 }
