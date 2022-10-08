@@ -19,6 +19,7 @@ import ru.practicum.explorewithme.request.model.Request;
 import ru.practicum.explorewithme.request.model.Status;
 import ru.practicum.explorewithme.user.UserRepository;
 import ru.practicum.explorewithme.user.model.User;
+
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,8 +50,8 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAllEvents(String text, List<Long> categories, boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
         List<Event> events = eventRepository.getEvents(text, categories, paid, rangeStart, rangeEnd, OffsetLimitPageable.of(from, size));
         if (onlyAvailable) {
-            events = events.stream().
-                    filter(x -> getConfirmedRequestsCount(x.getId()) <= x.getParticipantLimit())
+            events = events.stream()
+                    .filter(x -> getConfirmedRequestsCount(x.getId()) <= x.getParticipantLimit())
                     .collect(Collectors.toList());
         }
         if (!sort.equals("EVENT_DATE") && !sort.equals("VIEWS")) {

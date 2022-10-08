@@ -36,6 +36,7 @@ public interface EventService {
     List<ParticipationRequestDto> getRequestsForEventOfUser(long userId, long eventId);
 
     ParticipationRequestDto confirmRequestToEventOfUser(long userId, long eventId, long reqId);
+
     ParticipationRequestDto rejectRequestToEventOfUser(long userId, long eventId, long reqId);
 
     //Admin___________________________________________________
@@ -48,6 +49,8 @@ public interface EventService {
                                      Integer size);
 
     EventFullDto editEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest);
+
     EventFullDto publishEvent(long eventId);
+
     EventFullDto rejectEvent(long eventId);
 }

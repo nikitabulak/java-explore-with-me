@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.user;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.explorewithme.user.dto.NewUserRequest;
 import ru.practicum.explorewithme.user.dto.UserDto;
 

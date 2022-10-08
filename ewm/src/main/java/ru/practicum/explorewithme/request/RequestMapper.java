@@ -15,7 +15,8 @@ public class RequestMapper {
                 request.getStatus()
         );
     }
-    public static Request toRequest(ParticipationRequestDto participationRequestDto, User user, Event event){
+
+    public static Request toRequest(ParticipationRequestDto participationRequestDto, User user, Event event) {
         return new Request(
                 0,
                 user,

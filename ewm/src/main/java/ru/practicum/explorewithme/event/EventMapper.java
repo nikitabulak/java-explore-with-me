@@ -5,8 +5,6 @@ import ru.practicum.explorewithme.category.model.Category;
 import ru.practicum.explorewithme.event.dto.*;
 import ru.practicum.explorewithme.event.model.Event;
 import ru.practicum.explorewithme.event.model.State;
-import ru.practicum.explorewithme.request.dto.ParticipationRequestDto;
-import ru.practicum.explorewithme.request.model.Request;
 import ru.practicum.explorewithme.user.UserMapper;
 import ru.practicum.explorewithme.user.model.User;
 
@@ -48,7 +46,7 @@ public class EventMapper {
         );
     }
 
-    public static Event toNewEvent(NewEventDto newEventDto, Category category, LocalDateTime createdOn, User initiator, State state){
+    public static Event toNewEvent(NewEventDto newEventDto, Category category, LocalDateTime createdOn, User initiator, State state) {
         return new Event(
                 0,
                 newEventDto.getAnnotation(),
@@ -67,7 +65,7 @@ public class EventMapper {
         );
     }
 
-    public static Event updateEvent(Event event, Category category, UpdateEventRequest updateEventRequest){
+    public static Event updateEvent(Event event, Category category, UpdateEventRequest updateEventRequest) {
         event.setAnnotation(updateEventRequest.getAnnotation());
         event.setCategory(category);
         event.setDescription(updateEventRequest.getDescription());
@@ -78,7 +76,7 @@ public class EventMapper {
         return event;
     }
 
-    public static Event updateAdminEvent(Event event, AdminUpdateEventRequest adminUpdateEventRequest, Category category){
+    public static Event updateAdminEvent(Event event, AdminUpdateEventRequest adminUpdateEventRequest, Category category) {
         event.setAnnotation(adminUpdateEventRequest.getAnnotation());
         event.setCategory(category);
         event.setDescription(adminUpdateEventRequest.getDescription());
@@ -89,6 +87,4 @@ public class EventMapper {
         event.setTitle(adminUpdateEventRequest.getTitle());
         return event;
     }
-
-
 }
