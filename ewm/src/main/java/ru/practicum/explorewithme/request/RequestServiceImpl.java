@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.request;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.event.EventRepository;
 import ru.practicum.explorewithme.event.EventServiceImpl;
 import ru.practicum.explorewithme.event.model.Event;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
@@ -42,6 +44,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto createRequestToAnotherEvent(long userId, long eventId) {
         Request request = requestRepository.findRequestByEventIdAndRequesterId(eventId, userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));

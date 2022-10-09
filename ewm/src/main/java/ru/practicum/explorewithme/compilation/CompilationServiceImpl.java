@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.compilation;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.compilation.dto.CompilationDto;
 import ru.practicum.explorewithme.compilation.dto.NewCompilationDto;
 import ru.practicum.explorewithme.compilation.model.Compilation;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
@@ -49,6 +51,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         Set<Event> events = new HashSet<>(eventRepository.findEventsByIdIn(newCompilationDto.getEvents()));
         Compilation compilation = CompilationMapper.toNewCompilation(newCompilationDto, events);
@@ -59,6 +62,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilation(long compId) {
         if (compilationRepository.existsById(compId)) {
             compilationRepository.deleteById(compId);

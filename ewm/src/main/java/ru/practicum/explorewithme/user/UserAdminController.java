@@ -13,14 +13,14 @@ import java.util.List;
 public class UserAdminController {
     private final UserService userService;
 
-    @GetMapping()
+    @GetMapping
     public List<UserDto> getAllUsers(@RequestParam List<Long> ids,
                                      @RequestParam(required = false, defaultValue = "0") int from,
                                      @RequestParam(required = false, defaultValue = "10") int size) {
         return userService.getAllUsers(ids, from, size);
     }
 
-    @PostMapping()
+    @PostMapping
     public UserDto createUser(@RequestBody NewUserRequest newUserRequest) {
         return userService.createUser(newUserRequest);
     }

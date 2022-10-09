@@ -1,8 +1,6 @@
 package ru.practicum.explorewithme.compilation.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.explorewithme.event.model.Event;
 
 import javax.persistence.*;
@@ -11,7 +9,8 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

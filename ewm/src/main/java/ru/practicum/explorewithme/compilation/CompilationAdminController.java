@@ -11,7 +11,7 @@ import ru.practicum.explorewithme.compilation.dto.NewCompilationDto;
 public class CompilationAdminController {
     private final CompilationService compilationService;
 
-    @PostMapping()
+    @PostMapping
     public CompilationDto createCompilation(@RequestBody NewCompilationDto newCompilationDto) {
         return compilationService.createCompilation(newCompilationDto);
     }

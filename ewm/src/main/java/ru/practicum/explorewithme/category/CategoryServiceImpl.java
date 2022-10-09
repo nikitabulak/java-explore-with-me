@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.category;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.category.dto.CategoryDto;
 import ru.practicum.explorewithme.category.dto.NewCategoryDto;
 import ru.practicum.explorewithme.category.model.Category;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
@@ -43,6 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         Category category = CategoryMapper.toNewCategory(newCategoryDto);
         category = categoryRepository.save(category);
@@ -50,6 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(long catId) {
         List<Event> events = eventRepository.findEventsByCategoryId(catId);
         if (events.isEmpty()) {

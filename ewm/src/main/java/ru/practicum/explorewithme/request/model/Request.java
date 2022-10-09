@@ -1,8 +1,6 @@
 package ru.practicum.explorewithme.request.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.explorewithme.event.model.Event;
 import ru.practicum.explorewithme.user.model.User;
 
@@ -10,7 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

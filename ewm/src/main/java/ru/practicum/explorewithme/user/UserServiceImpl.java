@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.user;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.pageable.OffsetLimitPageable;
 import ru.practicum.explorewithme.user.dto.NewUserRequest;
 import ru.practicum.explorewithme.user.dto.UserDto;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto createUser(NewUserRequest newUserRequest) {
         User user = UserMapper.toNewUser(newUserRequest);
         user = userRepository.save(user);
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(long userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);

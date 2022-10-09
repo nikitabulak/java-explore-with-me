@@ -11,12 +11,12 @@ import ru.practicum.explorewithme.category.dto.NewCategoryDto;
 public class CategoryAdminController {
     private final CategoryService categoryService;
 
-    @PatchMapping()
+    @PatchMapping
     public CategoryDto editCategory(@RequestBody CategoryDto editingCategoryDto) {
         return categoryService.editCategory(editingCategoryDto);
     }
 
-    @PostMapping()
+    @PostMapping
     public CategoryDto createCategory(@RequestBody NewCategoryDto newCategoryDto) {
         return categoryService.createCategory(newCategoryDto);
     }

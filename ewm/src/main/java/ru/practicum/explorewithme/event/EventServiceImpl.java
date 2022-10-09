@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.event;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.category.CategoryRepository;
 import ru.practicum.explorewithme.category.model.Category;
 import ru.practicum.explorewithme.event.dto.*;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class EventServiceImpl implements EventService {
     private static final LocalDateTime GET_EVENT_VIEWS_START_DATE = LocalDateTime.of(2020, 1, 1, 0, 0);
 
@@ -111,6 +113,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto createEventOfUser(long userId, NewEventDto newEventDto) {
         if (newEventDto.getEventDate().isAfter(LocalDateTime.now().plusHours(2))) {
             Category category = categoryRepository.findById(newEventDto.getCategory()).orElseThrow(() -> new CategoryNotFoundException("Категория с таким id не найдена!"));

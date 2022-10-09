@@ -1,9 +1,7 @@
 package ru.practicum.explorewithme.event.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.explorewithme.category.model.Category;
 import ru.practicum.explorewithme.user.model.User;
@@ -12,7 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

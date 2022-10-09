@@ -16,7 +16,7 @@ import java.util.List;
 public class EventAdminController {
     private final EventService eventService;
 
-    @GetMapping()
+    @GetMapping
     public List<EventFullDto> getFullEvents(@RequestParam(required = false) List<Long> users,
                                             @RequestParam(required = false) List<State> states,
                                             @RequestParam(required = false) List<Long> categories,
