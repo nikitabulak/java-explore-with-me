@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
@@ -37,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto editCategory(CategoryDto editingCategoryDto) {
         Category category = categoryRepository.findById(editingCategoryDto.getId()).orElseThrow(() -> new CategoryNotFoundException("Категория с таким id не найдена!"));
         category.setName(editingCategoryDto.getName());

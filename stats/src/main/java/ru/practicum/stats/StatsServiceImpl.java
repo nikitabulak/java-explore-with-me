@@ -1,6 +1,7 @@
 package ru.practicum.stats;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.dto.EndpointHit;
 import ru.practicum.stats.dto.HitDto;
 import ru.practicum.stats.dto.StatsDto;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional(readOnly = true)
 public class StatsServiceImpl implements StatsService {
     private final HitRepository hitRepository;
 
@@ -21,6 +23,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
+    @Transactional
     public HitDto addHit(EndpointHit endpointHit) {
         Hit hit = HitMapper.toNewHit(endpointHit);
         hit = hitRepository.save(hit);

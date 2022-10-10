@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
     private static final LocalDateTime GET_EVENT_VIEWS_START_DATE = LocalDateTime.of(2020, 1, 1, 0, 0);
 
@@ -95,6 +95,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEventOfUser(long userId, UpdateEventRequest updateEventRequest) {
         if (updateEventRequest.getEventDate().isAfter(LocalDateTime.now().plusHours(2))) {
             Event event = eventRepository.findById(updateEventRequest.getEventId()).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено!"));
@@ -137,6 +138,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto cancelEventOfUser(long userId, long eventId) {
         Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId);
         if (event != null && event.getState().equals(State.PENDING)) {
@@ -158,6 +160,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto confirmRequestToEventOfUser(long userId, long eventId, long reqId) {
         Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId);
         Request request = requestRepository.findRequestByIdAndEventIdAndEventInitiatorId(reqId, eventId, userId);
@@ -187,6 +190,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto rejectRequestToEventOfUser(long userId, long eventId, long reqId) {
         Request request = requestRepository.findRequestByIdAndEventIdAndEventInitiatorId(reqId, eventId, userId);
         if (request != null) {
@@ -208,6 +212,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto editEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         Category category = categoryRepository.findById(adminUpdateEventRequest.getCategory()).orElseThrow(() -> new CategoryNotFoundException("Категория с таким id не найдена"));
@@ -217,6 +222,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto publishEvent(long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         if (event.getState().equals(State.PENDING) && event.getEventDate().isAfter(LocalDateTime.now().plusHours(1))) {
@@ -230,6 +236,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto rejectEvent(long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие с таким id не найдено"));
         if (!event.getState().equals(State.PUBLISHED)) {

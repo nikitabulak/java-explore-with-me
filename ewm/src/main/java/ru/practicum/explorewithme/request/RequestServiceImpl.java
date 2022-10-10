@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
@@ -68,6 +68,7 @@ public class RequestServiceImpl implements RequestService {
 
 
     @Override
+    @Transactional
     public ParticipationRequestDto cancelRequestToAnotherEvent(long userId, long requestId) {
         Request request = requestRepository.findRequestByIdAndRequesterId(requestId, userId);
         if (request != null) {

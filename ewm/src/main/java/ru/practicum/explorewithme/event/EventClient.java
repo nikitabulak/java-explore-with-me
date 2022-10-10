@@ -6,6 +6,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.explorewithme.client.BaseClient;
 import ru.practicum.explorewithme.event.dto.StatsDto;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional(readOnly = true)
 public class EventClient extends BaseClient {
 
     @Autowired
@@ -30,6 +32,7 @@ public class EventClient extends BaseClient {
         );
     }
 
+    @Transactional
     public void hit(NewEventHit newEventHit) {
         post("/hit", newEventHit);
     }
