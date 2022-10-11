@@ -12,4 +12,14 @@ public interface UserService {
     UserDto createUser(NewUserRequest newUserRequest);
 
     void deleteUser(long userId);
+
+    UserDto allowSubscription(long userId);
+
+    UserDto disableSubscription(long userId);
+
+    UserDto subscribe(long userId, long author_id);
+
+    UserDto unsubscribe(long userId, long author_id);
+
+
 }

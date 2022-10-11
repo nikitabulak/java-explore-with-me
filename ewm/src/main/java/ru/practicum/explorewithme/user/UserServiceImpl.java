@@ -2,6 +2,8 @@ package ru.practicum.explorewithme.user;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.explorewithme.exception.SubscriptionIsNotAllowedException;
+import ru.practicum.explorewithme.exception.UserNotFoundException;
 import ru.practicum.explorewithme.pageable.OffsetLimitPageable;
 import ru.practicum.explorewithme.user.dto.NewUserRequest;
 import ru.practicum.explorewithme.user.dto.UserDto;
@@ -41,5 +43,47 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         }
+    }
+
+    @Override
+    @Transactional
+    public UserDto allowSubscription(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        user.setSubscriptionAllowed(true);
+        user = userRepository.save(user);
+        return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDto disableSubscription(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        user.setSubscriptionAllowed(false);
+        user = userRepository.save(user);
+        return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDto subscribe(long userId, long author_id) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        User author = userRepository.findById(author_id).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        if (author.isSubscriptionAllowed()) {
+            user.getAuthors().add(author);
+            user = userRepository.save(user);
+            return UserMapper.toUserDto(user);
+        } else {
+            throw new SubscriptionIsNotAllowedException("Данный автор запретил подписку на себя!");
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDto unsubscribe(long userId, long author_id) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        User author = userRepository.findById(author_id).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        user.getAuthors().remove(author);
+        user = userRepository.save(user);
+        return UserMapper.toUserDto(user);
     }
 }
