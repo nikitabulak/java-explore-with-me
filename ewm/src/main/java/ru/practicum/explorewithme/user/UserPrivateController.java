@@ -13,25 +13,21 @@ import ru.practicum.explorewithme.user.dto.UserDto;
 public class UserPrivateController {
     private final UserService userService;
 
-    @PatchMapping("/{userId}/subscription_on")
-    public UserDto allowSubscription(@PathVariable long userId) {
-        return userService.allowSubscription(userId);
+    @PatchMapping("/{userId}/{onOff}")
+    public UserDto subscriptionControl(@PathVariable long userId,
+                                       @PathVariable boolean onOff) {
+        return userService.subscriptionControl(userId, onOff);
     }
 
-    @PatchMapping("/{userId}/subscription_off")
-    public UserDto disableSubscription(@PathVariable long userId) {
-        return userService.disableSubscription(userId);
-    }
-
-    @PatchMapping("/{userId}/subscribe/{author_id}")
+    @PatchMapping("/{userId}/subscribe/{authorId}")
     public UserDto subscribe(@PathVariable long userId,
-                             @PathVariable long author_id) {
-        return userService.subscribe(userId, author_id);
+                             @PathVariable long authorId) {
+        return userService.subscribe(userId, authorId);
     }
 
-    @PatchMapping("/{userId}/unsubscribe/{author_id}")
+    @PatchMapping("/{userId}/unsubscribe/{authorId}")
     public UserDto unsubscribe(@PathVariable long userId,
-                               @PathVariable long author_id) {
-        return userService.unsubscribe(userId, author_id);
+                               @PathVariable long authorId) {
+        return userService.unsubscribe(userId, authorId);
     }
 }

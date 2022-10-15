@@ -47,27 +47,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto allowSubscription(long userId) {
+    public UserDto subscriptionControl(long userId, boolean onOff) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
-        user.setSubscriptionAllowed(true);
+        user.setSubscriptionAllowed(onOff);
         user = userRepository.save(user);
         return UserMapper.toUserDto(user);
     }
 
     @Override
     @Transactional
-    public UserDto disableSubscription(long userId) {
+    public UserDto subscribe(long userId, long authorId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
-        user.setSubscriptionAllowed(false);
-        user = userRepository.save(user);
-        return UserMapper.toUserDto(user);
-    }
-
-    @Override
-    @Transactional
-    public UserDto subscribe(long userId, long author_id) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
-        User author = userRepository.findById(author_id).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
         if (author.isSubscriptionAllowed()) {
             user.getAuthors().add(author);
             user = userRepository.save(user);
@@ -79,9 +70,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto unsubscribe(long userId, long author_id) {
+    public UserDto unsubscribe(long userId, long authorId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
-        User author = userRepository.findById(author_id).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("Пользователь с таким id не найден!"));
         user.getAuthors().remove(author);
         user = userRepository.save(user);
         return UserMapper.toUserDto(user);

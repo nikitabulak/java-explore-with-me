@@ -13,13 +13,11 @@ public interface UserService {
 
     void deleteUser(long userId);
 
-    UserDto allowSubscription(long userId);
+    UserDto subscriptionControl(long userId, boolean onOff);
 
-    UserDto disableSubscription(long userId);
+    UserDto subscribe(long userId, long authorId);
 
-    UserDto subscribe(long userId, long author_id);
-
-    UserDto unsubscribe(long userId, long author_id);
+    UserDto unsubscribe(long userId, long authorId);
 
 
 }
